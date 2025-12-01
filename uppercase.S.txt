@@ -1,0 +1,25 @@
+# a0 = pointer to a null-terminated string
+
+loop:
+    lb t0, 0(a0)            # Load 1 byte into t0
+    beq t0, zero, end_loop  # Stop if null terminator
+
+    # Check: if t0 < 'a' → skip
+    li t1, 'a'
+    blt t0, t1, skip_convert
+
+    # Check: if t0 > 'z' → skip
+    li t2, 'z'
+    bgt t0, t2, skip_convert
+
+    # Convert lowercase to uppercase
+    addi t0, t0, -32        # 'a' → 'A'
+
+skip_convert:
+    sb t0, 0(a0)            # Store back to memory
+    addi a0, a0, 1          # Move to next char
+    j loop
+
+end_loop:
+    # return or stop (depends on your environment)
+    jr ra                   # Proper exit for a function
